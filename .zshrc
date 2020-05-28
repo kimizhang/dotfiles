@@ -116,7 +116,7 @@ pyenv shell ebay-3.7.3
 source /Users/kaifzhang/workspace/z/z.sh
 
 # nvim
-#alias vim=nvim
+alias vim=nvim
 
 # Tess
 export PATH="/opt/tess/bin:$PATH"

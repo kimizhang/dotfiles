@@ -1,0 +1,15 @@
+# This is Git's per-user configuration file.
+[user]
+    name = Zhang
+    email = kaifzhang@lm-shc-16508326.corp.ebay.com
+[alias]
+	co = checkout
+    br = branch
+	ci = commit
+    st = status
+    fu = fetch upstream
+[rerere]
+	enabled = true
+    autoupate = 1
+[push]
+	default = simple

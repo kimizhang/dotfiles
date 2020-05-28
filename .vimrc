@@ -1,6 +1,8 @@
 syntax enable
 " Color theme
 colorscheme monokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
 " Python settings.
 set tabstop=4
@@ -9,6 +11,7 @@ set expandtab
 set number
 filetype indent on
 set autoindent
+set hlsearch
 
 " Use touch pad to scroll.
 set mouse=a
@@ -26,8 +29,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Auto Pair
 Plug 'jiangmiao/auto-pairs'
 
-" NerdCommenter
-Plug 'preservim/nerdcommenter'
+"Type '\\' aka <Leader><Leader> to quick (un)comment line(s).
+Plug 'tpope/vim-commentary' 
 
 " NewComm
 Plug 'vim-airline/vim-airline'
@@ -35,8 +38,26 @@ Plug 'vim-airline/vim-airline'
 " Quick scope
 Plug 'unblevable/quick-scope'
 
-" Jupyter
-" Plug 'jupyter-vim/jupyter-vim'
+" vim-go
+Plug 'fatih/vim-go'
+
+" javascript
+Plug 'pangloss/vim-javascript'
+
+"Fast move in current line via binary-search way. Type s or S to try.
+Plug 'jayflo/vim-skip' 
+
+" Highlight substitute.
+Plug 'markonm/traces.vim'
+
+" Git sign
+Plug 'mhinz/vim-signify'
+
+" Spell check
+Plug 'kamykn/spelunker.vim'
+
+" Linting
+Plug 'w0rp/ale' "Asynchronous linting/fixing for Vim.
 
 " Python Code-Style
 " Plug 'psf/black', { 'branch': 'stable' }
@@ -207,3 +228,100 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Trigger a highlight only when pressing f and F.
 let g:qs_highlight_on_keys = ['f', 'F']
+
+" vim-javascript
+let g:javascript_plugin_jsdoc = 1 "Enables syntax highlighting for JSDocs.
+let g:javascript_plugin_ngdoc = 1 "Enables some additional syntax highlighting for NGDocs. Requires JSDoc plugin to be enabled as well.
+let g:javascript_plugin_flow = 1 " Enables syntax highlighting for Flow.
+"Enables code folding for javascript based on our syntax file.
+augroup javascript_folding
+    au!
+    au FileType javascript setlocal foldmethod=syntax
+augroup END
+
+" vim-go -------------------- {
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_def_mode = 'godef'
+let g:go_def_mapping_enabled = 0  "I use custom gd map, that split a window.
+
+
+" Spelunker
+"" Enable spelunker.vim. (default: 1)
+" 1: enable
+" 0: disable
+let g:enable_spelunker_vim = 1
+
+" Enable spelunker.vim on readonly files or buffer. (default: 0)
+" 1: enable
+" 0: disable
+let g:enable_spelunker_vim_on_readonly = 0
+
+" Check spelling for words longer than set characters. (default: 4)
+let g:spelunker_target_min_char_len = 4
+
+" Max amount of word suggestions. (default: 15)
+let g:spelunker_max_suggest_words = 15
+
+" Max amount of highlighted words in buffer. (default: 100)
+let g:spelunker_max_hi_words_each_buf = 100
+
+" Spellcheck type: (default: 1)
+" 1: File is checked for spelling mistakes when opening and saving. This
+" may take a bit of time on large files.
+" 2: Spellcheck displayed words in buffer. Fast and dynamic. The waiting time
+" depends on the setting of CursorHold `set updatetime=1000`.
+let g:spelunker_check_type = 1
+
+" Highlight type: (default: 1)
+" 1: Highlight all types (SpellBad, SpellCap, SpellRare, SpellLocal).
+" 2: Highlight only SpellBad.
+" FYI: https://vim-jp.org/vimdoc-en/spell.html#spell-quickstart
+let g:spelunker_highlight_type = 1
+
+" Option to disable word checking.
+" Disable URI checking. (default: 0)
+let g:spelunker_disable_uri_checking = 1
+
+" Disable checking words in backtick/backquote. (default: 0)
+let g:spelunker_disable_backquoted_checking = 1
+
+" Disable default autogroup. (default: 0)
+let g:spelunker_disable_auto_group = 1
+
+" Create own custom autogroup to enable spelunker.vim for specific filetypes.
+augroup spelunker
+  autocmd!
+  " Setting for g:spelunker_check_type = 1:
+  autocmd BufWinEnter,BufWritePost *.vim,*.js,*.jsx,*.json,*.md call spelunker#check()
+
+  " Setting for g:spelunker_check_type = 2:
+  autocmd CursorHold *.vim,*.js,*.jsx,*.json,*.md call spelunker#check_displayed_words()
+augroup END
+
+" Override highlight group name of incorrectly spelled words. (default:
+" 'SpelunkerSpellBad')
+let g:spelunker_spell_bad_group = 'SpelunkerSpellBad'
+
+" Override highlight group name of complex or compound words. (default:
+" 'SpelunkerComplexOrCompoundWord')
+let g:spelunker_complex_or_compound_word_group = 'SpelunkerComplexOrCompoundWord'
+
+" Override highlight setting.
+highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
+highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
+
+" ale
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\   'python': ['black'],
+\}
+
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
+
+let g:ale_linters = {'python': ['pycodestyle', 'flake8', 'mypy']}
